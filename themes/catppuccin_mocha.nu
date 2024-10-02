@@ -28,7 +28,6 @@ const catppuccin_mocha_palette = {
     crust: "#11111b"
 }
 
-
 let catppuccin_mocha = {
     separator: $catppuccin_mocha_palette.overlay0
     leading_trailing_space_bg: { attr: "n" }

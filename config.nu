@@ -10,15 +10,17 @@
 
 # add themes
 source ./themes/catppuccin_mocha.nu
+source ./themes/catppuccin_macchiato.nu
 use ~/.cache/starship/init.nu
 # source ~/.oh-my-posh.nu 
 
 # configure local editor
-$env.EDITOR = "code"
+$env.EDITOR = "hx"
 
 
 alias fzfb = fzf -e --preview 'bat --style=numbers --color=always {}' --preview-window=right:65%:wrap
 alias ll = ls -l
+alias lm = ls -m
 
 # add completers
 source ./auto-completion/cargo.nu
@@ -27,7 +29,8 @@ source ./auto-completion/make.nu
 source ./auto-completion/winget.nu
 
 # add special directory shortcuts
-source ./custom/quickcd.nu
+source ./custom/mod.nu
+source ./custom/yazi.nu
 
 # add plugin configurations
 source ./plugins/dns.nu
@@ -218,7 +221,7 @@ $env.config = {
     history: {
         max_size: 100_000 # Session has to be reloaded for this to take effect
         sync_on_enter: true # Enable to share history between multiple sessions, else you have to close the session to write history to file
-        file_format: "plaintext" # "sqlite" or "plaintext"
+        file_format: "sqlite" # "sqlite" or "plaintext"
         isolation: false # only available with sqlite file_format. true enables history isolation, false disables it. true will allow the history to be isolated to the current session using up/down arrows. false will allow the history to be shared across all sessions.
     }
 
@@ -245,11 +248,11 @@ $env.config = {
         vi_normal: blink_block # block, underscore, line, blink_block, blink_underscore, blink_line, inherit to skip setting cursor shape (underscore is the default)
     }
 
-    color_config: $catppuccin_mocha # if you want a more interesting theme, you can replace the empty record with `$dark_theme`, `$light_theme` or another custom record
+    color_config: $catppuccin_macchiato # if you want a more interesting theme, you can replace the empty record with `$dark_theme`, `$light_theme` or another custom record
     use_grid_icons: true
-    footer_mode: "25" # always, never, number_of_rows, auto
+    footer_mode: "25" # always, never, number_of_rows, auRto
     float_precision: 2 # the precision for displaying floats in tables
-    buffer_editor: "" # command that will be used to edit the current line buffer with ctrl+o, if unset fallback to $env.EDITOR and $env.VISUAL
+    buffer_editor: "hx" # command that will be used to edit the current line buffer with ctrl+o, if unset fallback to $env.EDITOR and $env.VISUAL
     use_ansi_coloring: true
     bracketed_paste: true # enable bracketed paste, currently useless on windows
     edit_mode: emacs # emacs, vi
