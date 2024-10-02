@@ -21,6 +21,9 @@ $env.EDITOR = "hx"
 alias fzfb = fzf -e --preview 'bat --style=numbers --color=always {}' --preview-window=right:65%:wrap
 alias ll = ls -l
 alias lm = ls -m
+alias za = zellij attach
+alias gtree = git log --oneline --graph --decorate --all
+alias cdf = cd (fzf | path dirname)
 
 # add completers
 source ./auto-completion/cargo.nu
@@ -33,8 +36,8 @@ source ./custom/mod.nu
 source ./custom/yazi.nu
 
 # add plugin configurations
-source ./plugins/dns.nu
-source ./plugins/highlight.nu
+# source ./plugins/dns.nu
+# source ./plugins/highlight.nu
 
 
 let dark_theme = {
@@ -288,8 +291,8 @@ $env.config = {
     use_kitty_protocol: false # enables keyboard enhancement protocol implemented by kitty console, only if your terminal support this
 
     plugins: {
-        dns: $dns_settings
-        highlight: $highlight_settings
+        # dns: $dns_settings
+        # highlight: $highlight_settings
     } # Per-plugin configuration. See https://www.nushell.sh/contributor-book/plugins.html#configuration.
 
     plugin_gc: {
