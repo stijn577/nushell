@@ -9,8 +9,7 @@
 
 
 # add themes
-source ./themes/catppuccin_mocha.nu
-source ./themes/catppuccin_macchiato.nu
+source ./themes/theme.nu
 use ~/.cache/starship/init.nu
 # source ~/.oh-my-posh.nu 
 
@@ -29,12 +28,8 @@ source ./custom/unnamed.nu
 source ./custom/quickcd.nu
 
 # add plugin configurations
-# source ./plugins/dns.nu
-# source ./plugins/highlight.nu
-
-const palette = $catppuccin_macchiato_palette
-
-$env.FZF_DEFAULT_OPTS = $'--color=bg+:($palette.surface0),bg:($palette.base),spinner:($palette.rosewater),hl:($palette.red) --color=fg:($palette.text),header:($palette.red),info:($palette.mauve),pointer:($palette.rosewater) --color=marker:($palette.lavender),fg+:($palette.text),prompt:($palette.mauve),hl+:($palette.red) --color=selected-bg:($palette.surface1)'
+source ./plugins/dns.nu
+source ./plugins/highlight.nu
 
 alias fzfb = fzf -e --preview 'bat --style=numbers --color=always {}' --preview-window=right:65%:wrap
 alias za = zellij attach
@@ -251,8 +246,7 @@ $env.config = {
         vi_normal: blink_block # block, underscore, line, blink_block, blink_underscore, blink_line, inherit to skip setting cursor shape (underscore is the default)
     }
 
-    color_config: $catppuccin_macchiato # if you want a more interesting theme, you can replace the empty record with `$dark_theme`, `$light_theme` or another custom record
-    use_grid_icons: true
+    color_config: $theme # if you want a more interesting theme, you can replace the empty record with `$dark_theme`, `$light_theme` or another custom record
     footer_mode: "25" # always, never, number_of_rows, auRto
     float_precision: 2 # the precision for displaying floats in tables
     buffer_editor: "hx" # command that will be used to edit the current line buffer with ctrl+o, if unset fallback to $env.EDITOR and $env.VISUAL
@@ -291,8 +285,8 @@ $env.config = {
     use_kitty_protocol: false # enables keyboard enhancement protocol implemented by kitty console, only if your terminal support this
 
     plugins: {
-        # dns: $dns_settings
-        # highlight: $highlight_settings
+        dns: $dns_settings
+        highlight: $highlight_settings
     } # Per-plugin configuration. See https://www.nushell.sh/contributor-book/plugins.html#configuration.
 
     plugin_gc: {

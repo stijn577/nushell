@@ -29,7 +29,7 @@ const catppuccin_macchiato_palette = {
     crust: "#181926"
 }
 
-let catppuccin_macchiato = {
+let catppuccin_macchiato_theme = {
     separator: $catppuccin_macchiato_palette.overlay0
     leading_trailing_space_bg: { attr: "n" }
     header: { fg: $catppuccin_macchiato_palette.mauve attr: "b" }

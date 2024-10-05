@@ -1,3 +1,4 @@
 const highlight_settings = {
-    theme: catppuccin-mocha
+    custom_themes: ~/AppData/Roaming/bat/themes
+    theme: catppuccin-macchiato
 }
