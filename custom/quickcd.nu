@@ -1,3 +1,6 @@
+# special
+alias cdf = cd (fzf -e | path dirname)
+
 # permanent
 # cdc goes to config directory
 alias cdc = cd ~/AppData/Roaming/nushell

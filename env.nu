@@ -105,5 +105,5 @@ $env.NU_PLUGIN_DIRS = [
 let new = pwd
 let path_full = (which nu).path.0
 if ($path_full | str contains $new) {
-    cd $env.HOME
+    cd $env.HOMEPATH
 }

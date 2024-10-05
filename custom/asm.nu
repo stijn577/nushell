@@ -21,14 +21,14 @@ def armasm [
         error make -u { msg: "path does not exist" }
     }
     
-    let default_flags = ["-m arm" "--inlines" "--wide" "--source" "--demangle"]
+    let default_flags = ["--architecture=arm" "--inlines" "--wide" "--source" "--demangle"]
     
     let demangle = [
             [key value]; 
             [Rust --demangle=rust] 
             [C --demangle=gnu-v3]
         ]
-        | input list -d key $"(ansi $catppuccin_macchiato_palette.mauve)What is the original language of the .elf? \(this helps with demangling\)(ansi reset)"
+        | input list -d key $"(ansi $catppuccin_macchiato_palette.mauve)What is the original language of the .elf?(ansi reset) \(this helps with demangling\)"
         | get value
 
     let colors = [
@@ -36,7 +36,7 @@ def armasm [
             [Yes [--visualize-jumps=color --disassembler-color=on]] 
             [No [--visualize-jumps]]
         ] 
-        | input list -d key $"(ansi $catppuccin_macchiato_palette.mauve)Do you want to colorize outputs? \(coloring causes issues outside terminal\)(ansi reset)"
+        | input list -d key $"(ansi $catppuccin_macchiato_palette.mauve)Do you want to colorize outputs?(ansi reset) \(coloring causes issues outside terminal\)"
         | get value
 
     print $"(ansi $catppuccin_macchiato_palette.mauve) Objdump will run with the following flags(ansi reset):" [$demangle ...$colors ...$default_flags]     

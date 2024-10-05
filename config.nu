@@ -17,14 +17,6 @@ use ~/.cache/starship/init.nu
 # configure local editor
 $env.EDITOR = "hx"
 
-
-alias fzfb = fzf -e --preview 'bat --style=numbers --color=always {}' --preview-window=right:65%:wrap
-alias ll = ls -l
-alias lm = ls -m
-alias za = zellij attach
-alias gtree = git log --oneline --graph --decorate --all
-alias cdf = cd (fzf | path dirname)
-
 # add completers
 source ./auto-completion/cargo.nu
 source ./auto-completion/git.nu
@@ -32,13 +24,21 @@ source ./auto-completion/make.nu
 source ./auto-completion/winget.nu
 
 # add special directory shortcuts
-source ./custom/mod.nu
-source ./custom/yazi.nu
+source ./custom/asm.nu
+source ./custom/unnamed.nu
+source ./custom/quickcd.nu
 
 # add plugin configurations
 # source ./plugins/dns.nu
 # source ./plugins/highlight.nu
 
+const palette = $catppuccin_macchiato_palette
+
+$env.FZF_DEFAULT_OPTS = $'--color=bg+:($palette.surface0),bg:($palette.base),spinner:($palette.rosewater),hl:($palette.red) --color=fg:($palette.text),header:($palette.red),info:($palette.mauve),pointer:($palette.rosewater) --color=marker:($palette.lavender),fg+:($palette.text),prompt:($palette.mauve),hl+:($palette.red) --color=selected-bg:($palette.surface1)'
+
+alias fzfb = fzf -e --preview 'bat --style=numbers --color=always {}' --preview-window=right:65%:wrap
+alias za = zellij attach
+alias gtree = git log --oneline --graph --decorate --all
 
 let dark_theme = {
     # color for nushell primitives
@@ -257,7 +257,7 @@ $env.config = {
     float_precision: 2 # the precision for displaying floats in tables
     buffer_editor: "hx" # command that will be used to edit the current line buffer with ctrl+o, if unset fallback to $env.EDITOR and $env.VISUAL
     use_ansi_coloring: true
-    bracketed_paste: true # enable bracketed paste, currently useless on windows
+    bracketed_paste: false # enable bracketed paste, currently useless on windows
     edit_mode: emacs # emacs, vi
     shell_integration: {
         # osc2 abbreviates the path if in the home_dir, sets the tab/window title, shows the running command in the tab/window title
@@ -274,7 +274,7 @@ $env.config = {
         # 133;C - Mark pre-execution
         # 133;D;exit - Mark execution finished with exit code
         # This is used to enable terminals to know where the prompt is, the command is, where the command finishes, and where the output of the command is
-        osc133: true
+        osc133: false        
         # osc633 is closely related to osc133 but only exists in visual studio code (vscode) and supports their shell integration features
         # 633;A - Mark prompt start
         # 633;B - Mark prompt end
@@ -283,7 +283,7 @@ $env.config = {
         # 633;E - NOT IMPLEMENTED - Explicitly set the command line with an optional nonce
         # 633;P;Cwd=<path> - Mark the current working directory and communicate it to the terminal
         # and also helps with the run recent menu in vscode
-        osc633: true
+        osc633: false
         # reset_application_mode is escape \x1b[?1l and was added to help ssh work better
         reset_application_mode: true
     }
