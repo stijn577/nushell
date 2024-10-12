@@ -24,7 +24,7 @@ source ./auto-completion/winget.nu
 # add special directory shortcuts
 source ./custom/asm.nu
 source ./custom/unnamed.nu
-source ./custom/quickcd.nu
+# source ./custom/zoxide.nu
 
 # add plugin configurations
 source ./plugins/dns.nu
@@ -176,6 +176,8 @@ $env.config = {
 
     table: {
         mode: rounded # basic, compact, compact_double, light, thin, with_love, rounded, reinforced, heavy, none, other
+        # 'basic', 'thin', 'light', 'compact', 'with_love', 'compact_double', 'rounded', 'reinforced', 'heavy', 'none', 'psql', 'markdown', 'dots', 'restructured',
+        # 'ascii_rounded', or 'basic_compact'
         index_mode: always # "always" show indexes, "never" show indexes, "auto" = show indexes when a table has "index" column
         show_empty: true # show 'empty list' and 'empty record' placeholders for command output
         padding: { left: 1, right: 1 } # a left right padding of each column in a table
@@ -968,3 +970,5 @@ $env.config = ($env.config | upsert hooks {
 #         ]
 #     }
 # })
+
+source ./custom/zoxide.nu

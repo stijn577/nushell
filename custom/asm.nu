@@ -1,7 +1,7 @@
 # source "./themes/catppuccin_macchiato.nu"
 
 def x86asm [input: path] {
-    llvm-objdump.exe -d --x86-asm-syntax=intel a.exe -S --no-print-imm-hex --no-show-raw-insn 
+    llvm-objdump.exe -d --x86-asm-syntax=intel $input -S --no-print-imm-hex --no-show-raw-insn 
         | save dump.asm -f
 }
 
