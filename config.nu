@@ -7,13 +7,14 @@
 # And here is the theme collection
 # https://github.com/nushell/nu_scripts/tree/main/themes
 
-# add themes
-source ./themes/theme.nu
-use ~/.cache/starship/init.nu
-# source ~/.oh-my-posh.nu 
-
 # configure local editor
 $env.EDITOR = "hx"
+
+# add themes
+source ./themes/theme.nu
+
+# add starship prompt
+source ./custom/starship.nu
 
 # add completers
 source ./auto-completion/cargo.nu
@@ -24,13 +25,23 @@ source ./auto-completion/winget.nu
 # add special directory shortcuts
 source ./custom/asm.nu
 source ./custom/unnamed.nu
-# source ./custom/zoxide.nu
+# source ./custom/zoxide.nu # SEE (EOF)
 
 # add plugin configurations
 source ./plugins/dns.nu
 source ./plugins/highlight.nu
 
-alias fzfb = fzf -e --preview 'bat --style=numbers --color=always {}' --preview-window=right:65%:wrap
+def fzfb [] { 
+    let file = (fzf -e --preview 'bat --style=numbers --color=always {}' --preview-window=right:65%:wrap) 
+
+    $file |
+    | [Yes No]
+    | input list --index $"(ansi $catppuccin_macchiato_palette.mauve)Do you want to open the file in helix?(ansi reset)"
+    | match ($in) {
+        0 => { hx $file }
+        _ => { return null}
+    }
+}
 alias za = zellij attach
 alias gtree = git log --oneline --graph --decorate --all
 
@@ -186,7 +197,7 @@ $env.config = {
             wrapping_try_keep_words: true # A strategy used by the 'wrapping' methodology
             truncating_suffix: "..." # A suffix used by the 'truncating' methodology
         }
-        header_on_separator: false # show header text on separator/border line
+        header_on_separator: true # show header text on separator/border line
         # abbreviated_row_count: 10 # limit data rows from top and bottom after reaching a set point
     }
 
@@ -263,7 +274,7 @@ $env.config = {
     buffer_editor: hx # command that will be used to edit the current line buffer with ctrl+o, if unset fallback to $env.EDITOR and $env.VISUAL
     use_ansi_coloring: true
     bracketed_paste: false # enable bracketed paste, currently useless on windows
-    edit_mode: emacs # emacs, vi
+    edit_mode: vi # emacs, vi
     shell_integration: {
         # osc2 abbreviates the path if in the home_dir, sets the tab/window title, shows the running command in the tab/window title
         osc2: true
@@ -272,7 +283,7 @@ $env.config = {
         # osc8 is also implemented as the deprecated setting ls.show_clickable_links, it shows clickable links in ls output if your terminal supports it. show_clickable_links is deprecated in favor of osc8
         osc8: true
         # osc9_9 is from ConEmu and is starting to get wider support. It's similar to osc7 in that it communicates the path to the terminal
-        osc9_9: false
+        osc9_9: true
         # osc133 is several escapes invented by Final Term which include the supported ones below.
         # 133;A - Mark prompt start
         # 133;B - Mark prompt end
@@ -293,7 +304,7 @@ $env.config = {
         reset_application_mode: true
     }
     render_right_prompt_on_last_line: false # true or false to enable or disable right prompt to be rendered on last line of the prompt.
-    use_kitty_protocol: false # enables keyboard enhancement protocol implemented by kitty console, only if your terminal support this.
+    use_kitty_protocol: true # enables keyboard enhancement protocol implemented by kitty console, only if your terminal support this.
     highlight_resolved_externals: false # true enables highlighting of external commands in the repl resolved by which.
     recursion_limit: 50 # the maximum number of times nushell allows recursion before stopping it
     plugins: {
@@ -972,3 +983,4 @@ $env.config = ($env.config | upsert hooks {
 # })
 
 source ./custom/zoxide.nu
+

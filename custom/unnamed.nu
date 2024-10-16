@@ -1,3 +1,22 @@
+#FIXME: fix wezterm imgcat issues
+def preview-file [file: string] {
+	# bat --style=numbers --color=always ($file | str substring 1..)
+	let file = $file | str substring 1..
+	match ($file | path parse | get parent) {
+		"images" => {
+			chafa -f kitty --polite on $file -s 100x
+			# wezterm imgcat $file
+		},		
+		_ => {
+			bat --style=numbers --color=always $file
+		}
+	}
+}
+
+def preview [] {
+	fzf --preview 'nu -l -c "preview-file {}"' --preview-window=right:65%:wrap | hx $in
+}
+
 def img [path: path = ./] {
 	# construct path to glob pattern
 	let path = [$path ./**/*]
