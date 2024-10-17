@@ -17,14 +17,17 @@ def preview [] {
 	fzf --preview 'nu -l -c "preview-file {}"' --preview-window=right:65%:wrap | hx $in
 }
 
-def img [path: path = ./] {
-	# construct path to glob pattern
-	let path = [$path ./**/*]
-		| path join
-		| into glob
-
-	# cache all files (otherwise we need to ls twice => becomes very slow from directories closer to /)
- 	let files = ls -m $path
+# Display image in the terminal inline
+#
+# This script allows for rendering images in the terminal, first asking for what image extension you want to pick from.
+# And then showing a fuzzy finder interface to select the image you want to display.
+def img [
+	working_directory: string = ./ # working directory of the command, the globbing of images will start here
+	] {
+	cd $working_directory
+	
+	# cache all files globbed from working directory (otherwise we need to ls twice => becomes very slow from directories closer to /)
+ 	let files = ls -m ("./**/*"| into glob)
 		| where type =~ "image/" 
 		| get name 
 
