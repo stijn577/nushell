@@ -1,3 +1,11 @@
+def stats [] {
+	let avg = $in | math avg
+	let stddev = $in | math stddev
+	let median = $in | math median
+	let n = $in | length
+	return { avg: $avg, stddev: $stddev, median: $median, N: $n }
+}
+
 #FIXME: fix wezterm imgcat issues
 def preview-file [file: string] {
 	# bat --style=numbers --color=always ($file | str substring 1..)
