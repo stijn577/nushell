@@ -37,7 +37,12 @@ def themux [] {
   
   ["wezterm" "helix" "bat" "nushell"] 
     | each {|key| _change_app_theme ($color_config_paths | get $key | get path | path expand) ($color_config_paths | get $key | get keys) ($theme_strings | get $key) }
+
   
+
+  print "Change theme succesfully!"
+
+  return 
 }
 
 def _change_app_theme [config_path: path, keys: list<string>, vals: list<string>] {
@@ -49,13 +54,11 @@ def _change_app_theme [config_path: path, keys: list<string>, vals: list<string>
     error make -u { msg: "unbalanced amount of keys and values" }
   }
   
-  let buff = open -r $config_path
-
   for i in 0..(($keys | length) - 1) {
-    let $buff = edit_buffer $buff ($keys | get $i) ($vals | get $i)
+    mut buff = open -r $config_path
+    $buff = edit_buffer $buff ($keys | get $i) ($vals | get $i)
+    $buff | save -f $config_path
   }
-
-  
 }
 
 def edit_buffer [
@@ -63,11 +66,9 @@ def edit_buffer [
   key: string, 
   val: string
 ] string {
-  let index = ($buff | lines | enumerate | find $key).0.index | inspect
-  mut $local_buff = $buff 
-  $local_buff = $local_buff | lines | update $index ([$key $val] | str join) | to text
+  let index = ($buff | lines | enumerate | find $key).0.index 
+  
+  let buff = $buff | lines | update $index ([$key $val] | str join) | to text
 
-  print $local_buff
-
-  return $local_buff
+  return $buff
 }
