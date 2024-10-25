@@ -30,10 +30,22 @@ def preview [] {
 # This script allows for rendering images in the terminal, first asking for what image extension you want to pick from.
 # And then showing a fuzzy finder interface to select the image you want to display.
 def img [
-	working_directory: string = ./ # working directory of the command, the globbing of images will start here
+	path: path = ./ # path to image directly or path of scanning directory, the globbing of images will start here
 	] {
-	cd $working_directory
-	
+
+	# display image and exit if file given directly
+	if ($path | path type) == "file" {
+		if (ls -m $path | where type =~ "image/" | is-not-empty) {
+			wezterm imgcat $path --hold
+		} else {
+			error make -u { msg: "Path provided was a file, but not an image."}
+		}
+		return
+	}
+
+	# go to working directory
+	cd $path
+		
 	# cache all files globbed from working directory (otherwise we need to ls twice => becomes very slow from directories closer to /)
  	let files = ls -m ("./**/*"| into glob)
 		| where type =~ "image/" 
