@@ -2,8 +2,8 @@ source ./catppuccin_mocha.nu
 source ./catppuccin_macchiato.nu
 source ./rose_pine.nu
 
-let palette = $catppuccin_macchiato_palette
-let theme = $catppuccin_macchiato_theme
+let palette = $rose_pine_palette
+let theme = $rose_pine_theme
 
 $env.FZF_DEFAULT_OPTS = $'--color=bg+:($catppuccin_macchiato_palette.surface0),bg:-1,spinner:($catppuccin_macchiato_palette.rosewater),hl:($catppuccin_macchiato_palette.red) --color=fg:($catppuccin_macchiato_palette.text),header:($catppuccin_macchiato_palette.red),info:($catppuccin_macchiato_palette.mauve),pointer:($catppuccin_macchiato_palette.rosewater) --color=marker:($catppuccin_macchiato_palette.lavender),fg+:($catppuccin_macchiato_palette.text),prompt:($catppuccin_macchiato_palette.mauve),hl+:($catppuccin_macchiato_palette.red) --color=selected-bg:($catppuccin_macchiato_palette.surface1)'
 
@@ -13,13 +13,15 @@ const color_config_strings = [
     wezterm: ["\"Catppuccin Macchiato\""], 
     helix: ["\"catppuccin_macchiato\""], 
     bat: ["\"catppuccin-macchiato\""], 
-    nushell: ["$catppuccin_macchiato_palette", "$catppuccin_macchiato_theme"] 
+    nushell: ["$catppuccin_macchiato_palette", "$catppuccin_macchiato_theme"]
+    starship: "~/.config/starship/catppuccin_macchiato.toml"
   }],
   ["Rose Pine" { 
     wezterm: ["\"rose-pine\""], 
     helix: ["\"rose_pine\""], 
     bat: ["\"rose-pine\""], 
-    nushell: ["$rose_pine_palette", "$rose_pine_theme"]
+    nushell: ["$rose_pine_palette", "$rose_pine_theme"],
+    starship: "~/.config/starship/rose_pine.toml"
   }],
 ]
 
@@ -28,6 +30,7 @@ const color_config_paths = {
   helix: { path: "~/AppData/Roaming/helix/config.toml", keys: ["theme = "] }, 
   bat: { path: "~/AppData/Roaming/bat/config", keys: ["--theme="] },
   nushell: { path: "~/AppData/Roaming/nushell/themes/theme.nu", keys: ["let palette = " "let theme = "] }
+  starship: { path: "~/.config/starship/starship.toml" }
 }
 
 def themux [] {
@@ -38,7 +41,7 @@ def themux [] {
   ["wezterm" "helix" "bat" "nushell"] 
     | each {|key| _change_app_theme ($color_config_paths | get $key | get path | path expand) ($color_config_paths | get $key | get keys) ($theme_strings | get $key) }
 
-  
+  _change_starship_theme ($color_config_paths | get starship | get path | path expand) ($theme_strings | get starship | path expand)
 
   print "Change theme succesfully!"
 
@@ -59,6 +62,11 @@ def _change_app_theme [config_path: path, keys: list<string>, vals: list<string>
     $buff = edit_buffer $buff ($keys | get $i) ($vals | get $i)
     $buff | save -f $config_path
   }
+}
+
+def _change_starship_theme [dest_path: path, src_path: path] {
+  cp $src_path $dest_path
+  
 }
 
 def edit_buffer [
