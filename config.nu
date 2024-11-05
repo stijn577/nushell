@@ -22,6 +22,7 @@ source ./auto-completion/git.nu
 source ./auto-completion/make.nu
 source ./auto-completion/pueue.nu
 source ./auto-completion/winget.nu
+source ./auto-completion/carapace.nu
 
 # add special directory shortcuts
 source ./custom/asm.nu
@@ -248,12 +249,12 @@ $env.config = {
         case_sensitive: false # set to true to enable case-sensitive completions
         quick: true    # set this to false to prevent auto-selecting completions when only one remains
         partial: true    # set this to false to prevent partial filling of the prompt
-        algorithm: "prefix"    # prefix or fuzzy
+        algorithm: "fuzzy"    # prefix or fuzzy
         sort: "smart" # "smart" (alphabetical for prefix matching, fuzzy score for fuzzy matching) or "alphabetical"
         external: {
             enable: true # set to false to prevent nushell looking into $env.PATH to find more suggestions, `false` recommended for WSL users as this look up may be very slow
             max_results: 100 # setting it lower can improve completion performance at the cost of omitting some options
-            completer: null # check 'carapace_completer' above as an example
+            completer: $carapace_completer # check 'carapace_completer' above as an example
         }
         use_ls_colors: true # set this to true to enable file/path/directory completions using LS_COLORS
     }
@@ -427,6 +428,30 @@ $env.config = {
     ]
 
     keybindings: [
+        {
+            name: move_down
+            modifier: control
+            keycode: char_j
+            mode: [emacs, vi_normal, vi_insert]
+            event: {
+                until: [
+                    { send: menudown }
+                    { send: down }
+                ]
+            }
+        }
+        {
+            name: move_up
+            modifier: control
+            keycode: char_k
+            mode: [emacs, vi_normal, vi_insert]
+            event: {
+                until: [
+                    { send: menuup }
+                    { send: up }
+                ]
+            }
+        }
         {
             name: completion_menu
             modifier: none

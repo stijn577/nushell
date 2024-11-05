@@ -3,8 +3,8 @@ source ./catppuccin_macchiato.nu
 source ./catppuccin_mocha.nu
 source ./rose_pine.nu
 
-let palette = $catppuccin_latte_palette
-let theme = $catppuccin_latte_theme
+let palette = $catppuccin_macchiato_palette
+let theme = $catppuccin_macchiato_theme
 
 if $palette != $rose_pine_palette {
 $env.FZF_DEFAULT_OPTS = $'--color=bg+:($palette.surface0),bg:-1,spinner:($palette.rosewater),hl:($palette.red) --color=fg:($palette.text),header:($palette.red),info:($palette.mauve),pointer:($palette.rosewater) --color=marker:($palette.lavender),fg+:($palette.text),prompt:($palette.mauve),hl+:($palette.red) --color=selected-bg:($palette.surface1)'
@@ -45,7 +45,7 @@ const color_config_paths = {
 
 def themux [] {
  let theme_strings = $color_config_strings  
-  | input list -d key 
+  | input list -d key --fuzzy
   | get val
   
   ["wezterm" "helix" "bat" "nushell"] 

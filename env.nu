@@ -107,3 +107,5 @@ let path_full = (which nu).path.0
 if ($path_full | str contains $new) {
     cd $env.HOMEPATH
 }
+
+$env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense,nushell'

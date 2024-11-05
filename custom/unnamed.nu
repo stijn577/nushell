@@ -61,7 +61,7 @@ def img [
 			} else { 
 				$in 
 			}
-		| input list $"(ansi $catppuccin_macchiato_palette.mauve)What is the file extension you are looking for?(ansi reset)"
+		| input list $"(ansi $palette.mauve)What is the file extension you are looking for?(ansi reset)"
 	
 	# show only files that end with selected extension, pipe to fzf and wezterm to pick and display
 	$files
@@ -100,7 +100,7 @@ def --env yy [...args] {
 # 			} else { 
 # 				$in 
 # 			}
-# 		| input list $"(ansi $catppuccin_macchiato_palette.mauve)What is the file extension you are looking for?(ansi reset)"
+# 		| input list $"(ansi $palette.mauve)What is the file extension you are looking for?(ansi reset)"
 	
 # 	# join path and extension and pipe into fzf to select image
 # 	# then pipe into wezterm to display
