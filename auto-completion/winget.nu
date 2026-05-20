@@ -88,12 +88,12 @@ def "nu-complete winget parse table" [lines: any] {
         | first
     )
     let lengths = {
-        name: ($header.name | str length),
-        id: ($header.id | str length),
-        version: ($header.version | str length),
-        match: ($header.match | str length),
-        available: ($header.available | str length),
-        source: ($header.source | str length)
+        name: ($header.name | default "" | str length),
+        id: ($header.id | default "" | str length),
+        version: ($header.version | default "" | str length),
+        match: ($header.match | default "" | str length),
+        available: ($header.available | default "" | str length),
+        source: ($header.source | default "" | str length)
     }
     $lines | skip 2 | each { |it|
         let it = ($it | split chars)
@@ -229,7 +229,7 @@ export def "winget show" [
         (do $flagify header $header)
         (do $flagify accept_source_agreements $accept_source_agreements)
         (do $flagify help $help)
-    ] | flatten) | filter { not ($in | is-empty)})
+    ] | flatten) | where { not ($in | is-empty)})
 
     let output = ^winget ...$params
     if $raw or $help or ($output | str contains "No package selection argument was provided") {
@@ -418,7 +418,7 @@ export def "winget list" [
             (do $flagify help $help)
         ] 
         | flatten
-        | filter { not ($in | is-empty) })
+        | where { not ($in | is-empty) })
     )
 
     let output = ^winget ...$params

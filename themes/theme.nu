@@ -79,7 +79,7 @@ def _change_starship_theme [dest_path: path, src_path: path] {
   
 }
 
-def edit_buffer [buff: string, key: string, val: string] string {
+def edit_buffer [buff: string, key: string, val: string] {
   let index = ($buff | lines | enumerate | find $key).0.index 
   
   let buff = $buff | lines | update $index ([$key $val] | str join) | to text

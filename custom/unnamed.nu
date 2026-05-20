@@ -65,7 +65,7 @@ def img [
 	
 	# show only files that end with selected extension, pipe to fzf and wezterm to pick and display
 	$files
-		| filter { |file| $file | str ends-with $extension }
+		| where { |file| $file | str ends-with $extension }
 		| to text 
 		| fzf 
 		| wezterm imgcat $in --hold
