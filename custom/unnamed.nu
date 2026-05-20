@@ -81,6 +81,24 @@ def --env yy [...args] {
 	rm -fp $tmp
 }
 
+def scsv [file: path] {
+	open $file --raw
+		| str replace " -> " "," --all
+		| str replace ($in | str substring 0..(($in | str index-of ",") - 1)) timestamp
+		| from csv
+}
+
+def repattern [pattern: string, replace: string] {
+  let input_files = ls ($"**/*($pattern)*" | into glob) | get name 
+  let output_files = $input_files | each { $in | str replace $pattern $replace } 
+  let pairs = $input_files | zip $output_files
+  
+  let table = $pairs | each { {inputs: $in.0, outputs: $in.1 }}
+  print $table
+
+  let moves = $pairs | each { mv $in.0 $in.1 }
+}
+
 # old implementation of img (slower)
 # def img [path: path = ./] {
 # 	# construct path to glob pattern
@@ -114,3 +132,7 @@ def --env yy [...args] {
 # 		| fzf 
 # 		| wezterm imgcat $in --hold
 # }
+
+def mirror [] {
+	scrcpy --video-codec=h265 --render-driver=vulkan --video-buffer=50 --max-fps=60 -m1920 --audio-output-buffer=10 --no-control --print-fps --window-borderless -d --audio-dup
+}

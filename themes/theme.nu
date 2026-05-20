@@ -21,7 +21,7 @@ const color_config_strings = [
   }],
   ["Catppuccin Macchiato" { 
     wezterm: ["\"Catppuccin Macchiato\""], 
-    helix: ["\"catppuccin_macchiato\""], 
+    helix: ["\"catppuccin_macchiato_default_tp\""], 
     bat: ["\"catppuccin-macchiato\""], 
     nushell: ["$catppuccin_macchiato_palette", "$catppuccin_macchiato_theme"]
     starship: "~/.config/starship/catppuccin_macchiato.toml"
@@ -43,19 +43,8 @@ const color_config_paths = {
   starship: { path: "~/.config/starship/starship.toml" }
 }
 
-def themux [] {
- let theme_strings = $color_config_strings  
-  | input list -d key --fuzzy
-  | get val
-  
-  ["wezterm" "helix" "bat" "nushell"] 
-    | each {|key| _change_app_theme ($color_config_paths | get $key | get path | path expand) ($color_config_paths | get $key | get keys) ($theme_strings | get $key) }
-
-  _change_starship_theme ($color_config_paths | get starship | get path | path expand) ($theme_strings | get starship | path expand)
-
-  print "Change theme succesfully!"
-
-  return 
+def _change_starship_theme [dest_path: path, src_path: path] {
+  cp $src_path $dest_path
 }
 
 def _change_app_theme [config_path: path, keys: list<string>, vals: list<string>] {
@@ -74,12 +63,41 @@ def _change_app_theme [config_path: path, keys: list<string>, vals: list<string>
   }
 }
 
-def _change_starship_theme [dest_path: path, src_path: path] {
-  cp $src_path $dest_path
-  
+def change_themes [theme_strings] {
+  ["wezterm" "helix" "bat" "nushell"] 
+    | each { |key|
+      _change_app_theme (
+        $color_config_paths
+        | get $key | get path
+        | path expand
+      ) (
+        $color_config_paths
+        | get $key
+        | get keys
+      ) (
+        $theme_strings
+        | get $key
+      )
+    }
+
+  _change_starship_theme ($color_config_paths | get starship | get path | path expand) ($theme_strings | get starship | path expand)
+
+  print "Change theme succesfully!"
 }
 
-def edit_buffer [buff: string, key: string, val: string] string {
+def themux [] {
+ let theme_strings = $color_config_strings  
+  | input list -d key --fuzzy
+  | get val
+  | inspect
+
+  change_themes $theme_strings
+  
+  return 
+}
+
+
+def edit_buffer [buff: string, key: string, val: string]: any -> string {
   let index = ($buff | lines | enumerate | find $key).0.index 
   
   let buff = $buff | lines | update $index ([$key $val] | str join) | to text
