@@ -38,7 +38,7 @@ def img [
 		if (ls -m $path | where type =~ "image/" | is-not-empty) {
 			wezterm imgcat $path --hold
 		} else {
-			error make -u { msg: "Path provided was a file, but not an image."}
+			error make -u { msg: "Path provided was a file, but not an image." }
 		}
 		return
 	}
@@ -61,11 +61,12 @@ def img [
 			} else { 
 				$in 
 			}
+		| prepend "any" # allows users to select from all image types
 		| input list $"(ansi $palette.mauve)What is the file extension you are looking for?(ansi reset)"
 	
 	# show only files that end with selected extension, pipe to fzf and wezterm to pick and display
 	$files
-		| where { |file| $file | str ends-with $extension }
+		| if $extension == any { $in } else { $in | where { |file| $file | str ends-with $extension } }
 		| to text 
 		| fzf 
 		| wezterm imgcat $in --hold
