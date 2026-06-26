@@ -28,7 +28,7 @@ const catppuccin_mocha_palette = {
     crust: "#11111b"
 }
 
-let catppuccin_mocha = {
+let catppuccin_mocha_theme = {
     separator: $catppuccin_mocha_palette.overlay0
     leading_trailing_space_bg: { attr: "n" }
     header: { fg: $catppuccin_mocha_palette.mauve attr: "b" }
