@@ -109,3 +109,4 @@ if ($path_full | str contains $new) {
 }
 
 $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense,nushell'
+$env.IDF_PATH = "C:/Users/Stijn_Admin/esp/v5.4.1/esp-idf"

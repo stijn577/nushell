@@ -38,7 +38,7 @@ def img [
 		if (ls -m $path | where type =~ "image/" | is-not-empty) {
 			wezterm imgcat $path --hold
 		} else {
-			error make -u { msg: "Path provided was a file, but not an image."}
+			error make -u { msg: "Path provided was a file, but not an image." }
 		}
 		return
 	}
@@ -61,11 +61,12 @@ def img [
 			} else { 
 				$in 
 			}
+		| prepend "any" # allows users to select from all image types
 		| input list $"(ansi $palette.mauve)What is the file extension you are looking for?(ansi reset)"
 	
 	# show only files that end with selected extension, pipe to fzf and wezterm to pick and display
 	$files
-		| where { |file| $file | str ends-with $extension }
+		| if $extension == any { $in } else { $in | where { |file| $file | str ends-with $extension } }
 		| to text 
 		| fzf 
 		| wezterm imgcat $in --hold
@@ -79,6 +80,24 @@ def --env yy [...args] {
 		cd $cwd
 	}
 	rm -fp $tmp
+}
+
+def scsv [file: path] {
+	open $file --raw
+		| str replace " -> " "," --all
+		| str replace ($in | str substring 0..(($in | str index-of ",") - 1)) timestamp
+		| from csv
+}
+
+def repattern [pattern: string, replace: string] {
+  let input_files = ls ($"**/*($pattern)*" | into glob) | get name 
+  let output_files = $input_files | each { $in | str replace $pattern $replace } 
+  let pairs = $input_files | zip $output_files
+  
+  let table = $pairs | each { {inputs: $in.0, outputs: $in.1 }}
+  print $table
+
+  let moves = $pairs | each { mv $in.0 $in.1 }
 }
 
 # old implementation of img (slower)
@@ -114,3 +133,7 @@ def --env yy [...args] {
 # 		| fzf 
 # 		| wezterm imgcat $in --hold
 # }
+
+def mirror [] {
+	scrcpy --video-codec=h265 --render-driver=vulkan --video-buffer=50 --max-fps=60 -m1920 --audio-output-buffer=10 --no-control --print-fps --window-borderless -d --audio-dup
+}

@@ -21,6 +21,7 @@ const color_config_strings = [
   }],
   ["Catppuccin Macchiato" { 
     wezterm: ["\"Catppuccin Macchiato\""], 
+<<<<<<< HEAD
     helix: ["catppuccin_macchiato"], 
     bat: ["\"Catppuccin Macchiato\""], 
     nushell: ["$catppuccin_macchiato_palette", "$catppuccin_macchiato_theme"],
@@ -32,6 +33,12 @@ const color_config_strings = [
     bat: ["\"Catppuccin Mocha\""], 
     nushell: ["$catppuccin_mocha_palette", "$catppuccin_mocha_theme"],
     starship: ["catppuccin_mocha"]
+=======
+    helix: ["\"catppuccin_macchiato_default_tp\""], 
+    bat: ["\"catppuccin-macchiato\""], 
+    nushell: ["$catppuccin_macchiato_palette", "$catppuccin_macchiato_theme"]
+    starship: "~/.config/starship/catppuccin_macchiato.toml"
+>>>>>>> 608a7b1f557d71f979cd0dce82831b43be18cc10
   }],
   ["Rose Pine" { 
     wezterm: ["\"rose-pine\""], 
@@ -50,6 +57,7 @@ const color_config_paths = {
   starship: { path: "~/.config/starship/starship.toml", keys: ["palette"] }
 }
 
+<<<<<<< HEAD
 
 # conf | update ($keys | get $i) ($vals | get $i)# def themux [] {
 #   let theme = $color_config_strings | input list -d key --fuzzy | get val
@@ -78,11 +86,22 @@ const color_config_paths = {
 #     if not ($config_path | path exists) {
 #       error make -u { msg: $"config path ($config_path) does not exist" }
 #     }
+=======
+def _change_starship_theme [dest_path: path, src_path: path] {
+  cp $src_path $dest_path
+}
+
+def _change_app_theme [config_path: path, keys: list<string>, vals: list<string>] {
+  if not ($config_path | path exists) {
+    error make -u { msg: $"config path ($config_path) does not exist" }
+  }
+>>>>>>> 608a7b1f557d71f979cd0dce82831b43be18cc10
   
 #     if not (($keys | length) == ($vals | length)) {
 #       error make -u { msg: "unbalanced amount of keys and values" }
 #     }
   
+<<<<<<< HEAD
 #     for i in 0..(($keys | length) - 1) {
 #       mut buff = open -r $config_path
 #       $buff = edit_buffer $buff ($keys | get $i) ($vals | get $i)
@@ -90,8 +109,50 @@ const color_config_paths = {
 #     }
 #   }
 # }
+=======
+  for i in 0..(($keys | length) - 1) {
+    mut buff = open -r $config_path
+    $buff = edit_buffer $buff ($keys | get $i) ($vals | get $i)
+    $buff | save -f $config_path
+  }
+}
 
-def edit_buffer [buff: string, key: string, val: string] {
+def change_themes [theme_strings] {
+  ["wezterm" "helix" "bat" "nushell"] 
+    | each { |key|
+      _change_app_theme (
+        $color_config_paths
+        | get $key | get path
+        | path expand
+      ) (
+        $color_config_paths
+        | get $key
+        | get keys
+      ) (
+        $theme_strings
+        | get $key
+      )
+    }
+
+  _change_starship_theme ($color_config_paths | get starship | get path | path expand) ($theme_strings | get starship | path expand)
+
+  print "Change theme succesfully!"
+}
+>>>>>>> 608a7b1f557d71f979cd0dce82831b43be18cc10
+
+def themux [] {
+ let theme_strings = $color_config_strings  
+  | input list -d key --fuzzy
+  | get val
+  | inspect
+
+  change_themes $theme_strings
+  
+  return 
+}
+
+
+def edit_buffer [buff: string, key: string, val: string]: any -> string {
   let index = ($buff | lines | enumerate | find $key).0.index 
   
   let buff = $buff | lines | update $index ([$key $val] | str join) | to text

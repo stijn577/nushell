@@ -25,6 +25,7 @@ source ./auto-completion/winget.nu
 source ./auto-completion/carapace.nu
 
 # add special directory shortcuts
+source ./custom/aliases.nu
 source ./custom/asm.nu
 source ./custom/unnamed.nu
 # source ./custom/zoxide.nu # SEE (EOF)
@@ -259,6 +260,9 @@ $env.config = {
         use_ls_colors: true # set this to true to enable file/path/directory completions using LS_COLORS
     }
 
+    filesize: {
+        unit: binary
+    }
 
     cursor_shape: {
         emacs: blink_line # block, underscore, line, blink_block, blink_underscore, blink_line, inherit to skip setting cursor shape (line is the default)
@@ -272,7 +276,7 @@ $env.config = {
     buffer_editor: hx # command that will be used to edit the current line buffer with ctrl+o, if unset fallback to $env.EDITOR and $env.VISUAL
     use_ansi_coloring: true
     bracketed_paste: false # enable bracketed paste, currently useless on windows
-    edit_mode: vi # emacs, vi
+    edit_mode: emacs # emacs, vi
     shell_integration: {
         # osc2 abbreviates the path if in the home_dir, sets the tab/window title, shows the running command in the tab/window title
         osc2: true
